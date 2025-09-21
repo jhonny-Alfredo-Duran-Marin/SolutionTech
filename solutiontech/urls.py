@@ -1,25 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # Documentación
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema')),
-
-    # API de accounts
-    path('api/accounts/', include('accounts.urls')),
-
-    # Autenticación con JWT
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    # Dejamos subscriptions para después
-    # path('api/subscriptions/', include('subscriptions.urls')),
+    path('api/v1/', include('accounts.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('docs/', include_docs_urls(title='API Documentation')),
 ]
